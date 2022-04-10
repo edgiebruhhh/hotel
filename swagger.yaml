@@ -1,0 +1,165 @@
+openapi: "3.0.0"
+info:
+  title: Sample API
+  description: >-
+    Optional multiline or single-line description in
+    [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 0.1.9
+servers:
+  - url: http://localhost:1337/
+    description: Optional server description, e.g. Main (production) server
+
+tags:
+  - name: prijava
+  - name: termin
+  - name: hotel
+  - name: korisnik
+  - name: sobe
+paths:
+  /hotel/{ime}:
+    get:
+      tags:
+        - hotel
+      parameters:
+        - name: ime
+          in: path
+          required: true
+          description: Parameter description in CommonMark or HTML.
+          schema:
+             type: string
+      responses:
+        '200':
+          description: Moze biti vise odgovora da je zauzeto ili da zakazemo
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Uspesno ste zakazali termin
+  /prijava/{ime}/{jbmg}:
+    post:
+      tags:
+        - prijava
+      summary: Zakazivanje termina
+      description: Optional extended description in CommonMark or HTML
+      parameters:
+         
+        - name: ime
+          in: path
+          required: true
+          description: Parameter description in CommonMark or HTML.
+          schema:
+             type: string
+      
+        - name: jbmg
+          in: path
+          required: true
+          description: Parameter description in CommonMark or HTML.
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+        - name: hotel
+          in: query
+          description: Slobodni dani ovog meseca
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - Zivago
+                - Trivago
+        - name: vrsta_sobe
+          in: query
+          description: Slobodni dani ovog meseca
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - jednokrevetna
+                - dvokrevetna 
+      requestBody:
+        required: true
+        content:
+           application/json:
+            schema:
+              type: object
+              properties:
+                datum:
+                  type: array
+                  items:
+                    type: string
+            example:
+              datum: "2022-03-06:2022-03-09"
+      responses:
+        '200':
+          description: Moze biti vise odgovora da je zauzeto ili da zakazemo
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Uspesno ste zakazali termin
+  /termini:
+    get:
+      tags:
+        - termin
+      summary: ukucas datum od koga do koga i izbaci ti slobodne dane
+      parameters:
+        - name: hotel
+          in: query
+          description: Slobodni dani ovog meseca
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - Zivago
+                - Trivago
+        - name: mesec
+          in: query
+          description: Slobodni dani ovog meseca
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - Januar
+                - Februar
+                - Mart 
+                - April
+                - Maj 
+                - Jun
+                - Jul
+                - Avgust
+                - Setembar
+                - Oktobar
+                - Novembar
+                - Decembar
+        - name: vrsta_sobe
+          in: query
+          description: Slobodni dani ovog meseca
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - jednokrevetna
+                - dvokrevetna
+      responses:
+        '200':
+          description: Izbaci dostupne Termine
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "bla-bla-bbla:bla bla bla"
